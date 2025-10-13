@@ -1,0 +1,31 @@
+---
+const { title } = Astro.props;
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <style>
+        html {
+            scroll-padding-top: 20px;
+        }
+    </style>
+</head>
+<body class="bg-black text-gray-800 scroll-smooth min-h-screen flex flex-col">
+
+<div class="fixed top-0 left-0 right-0 z-50 h-20">
+    <Header />
+</div>
+
+<main class="flex-grow sm:pt-32 md:pt-0 lg:pt-0 lg:pb-0 md:pb-0 sm:pb-10 mb-0">
+    <slot />
+</main>
+
+<Footer />
+
+</body>
+</html>

@@ -1,0 +1,152 @@
+---
+import { sanityClient } from "../lib/sanityClient";
+const { id } = Astro.props;
+
+type Skill = {
+    _id: string;
+    title: string;
+    name: string;
+    icon: string;
+};
+
+const SKILL_QUERY = `*[_type == "skills"] | order(title asc){
+  _id,
+  title,
+  name,
+  icon
+}`;
+
+const skills: Skill[] = await sanityClient.fetch(SKILL_QUERY);
+
+const groupedSkills: Record<string, Skill[]> = skills.reduce((acc, skill) => {
+    if (!acc[skill.title]) acc[skill.title] = [];
+    acc[skill.title].push(skill);
+    return acc;
+}, {} as Record<string, Skill[]>);
+
+const categoryOrder = ['frontend', 'backend', 'databases', 'toolsFrameworks'];
+const categories = categoryOrder.filter(cat => groupedSkills[cat]);
+
+const categoryTitles: Record<string, string> = {
+    'frontend': 'Frontend',
+    'backend': 'Backend',
+    'toolsFrameworks': 'Tools & Frameworks',
+    'databases': 'Databases',
+};
+---
+
+<section id={id} class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 relative overflow-hidden py-20">
+    <div class="hidden lg:block left-20 top-1/2 -translate-y-1/2 z-0">
+        <h3 class="text-3xl ml-28 font-semibold text-white border-b-2 border-purple-400 transform -rotate-90 whitespace-nowrap">
+            Skills
+        </h3>
+    </div>
+
+    <div class="container mx-auto px-6 lg:pl-20 lg:pr-40 text-white relative z-10">
+
+        <div class="text-center mb-12">
+            <h2 class="text-3xl sm:text-4xl font-bold text-purple-400 mb-0 inline-block">
+                What I Do
+            </h2>
+        </div>
+
+        <div class="flex flex-wrap justify-center gap-8 mb-12">
+            {categories.map((category, index) => (
+                    <button
+                            class="tab-btn relative px-2 py-2 font-semibold text-lg transition-all duration-300 group"
+                            data-category={category}
+                    >
+                    <span class:list={[
+                        'relative z-10 transition-all duration-300 group-hover:scale-110 inline-block',
+                        index === 0 ? 'text-white' : 'text-gray-400 group-hover:text-white'
+                    ]}>
+                        {categoryTitles[category] || category}
+                    </span>
+                        <div class:list={[
+                            'absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-purple-500 to-blue-500 transition-all duration-300',
+                            index === 0 ? 'w-full' : 'w-0 group-hover:w-full'
+                        ]}></div>
+                    </button>
+            ))}
+        </div>
+
+        <div class="relative min-h-[400px]">
+            {categories.map((category, index) => (
+                    <div
+                            class="skill-content absolute inset-0 transition-opacity duration-300"
+                            data-category={category}
+                            class:list={[index === 0 ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none']}
+                    >
+                        {groupedSkills[category] && (
+                                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                                    {groupedSkills[category].map(skill => (
+                                            <div class="group relative bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-sm p-6 rounded-2xl shadow-xl border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 hover:transform hover:-translate-y-2 flex flex-col items-center">
+                                                <!-- Glow effect -->
+                                                <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                                                <!-- Icon -->
+                                                <div class="relative z-10 w-20 h-20 mb-4 flex items-center justify-center">
+                                                    <img
+                                                            src={skill.icon}
+                                                            alt={skill.name}
+                                                            class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
+                                                            onerror="this.src='https://ui-avatars.com/api/?name=' + encodeURIComponent(this.alt) + '&background=7c3aed&color=fff&size=128'"
+                                                    />
+                                                </div>
+
+                                                <h3 class="relative z-10 text-center text-sm font-semibold text-gray-300 group-hover:text-white transition-colors duration-300">
+                                                    {skill.name}
+                                                </h3>
+                                            </div>
+                                    ))}
+                                </div>
+                        )}
+                    </div>
+            ))}
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const skillContents = document.querySelectorAll('.skill-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const category = button.getAttribute('data-category');
+
+                tabButtons.forEach(btn => {
+                    const span = btn.querySelector('span');
+                    const underline = btn.querySelector('div');
+
+                    if (span) span.classList.remove('text-white');
+                    if (span) span.classList.add('text-gray-400');
+                    if (underline) underline.classList.remove('w-full');
+                    if (underline) underline.classList.add('w-0');
+                });
+
+                const activeSpan = button.querySelector('span');
+                const activeUnderline = button.querySelector('div');
+                if (activeSpan) {
+                    activeSpan.classList.add('text-white');
+                    activeSpan.classList.remove('text-gray-400');
+                }
+                if (activeUnderline) {
+                    activeUnderline.classList.add('w-full');
+                    activeUnderline.classList.remove('w-0');
+                }
+
+                skillContents.forEach(content => {
+                    if (content.getAttribute('data-category') === category) {
+                        content.classList.remove('opacity-0', 'pointer-events-none');
+                        content.classList.add('opacity-100', 'pointer-events-auto');
+                    } else {
+                        content.classList.add('opacity-0', 'pointer-events-none');
+                        content.classList.remove('opacity-100', 'pointer-events-auto');
+                    }
+                });
+            });
+        });
+    });
+</script>

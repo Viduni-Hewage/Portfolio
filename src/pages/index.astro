@@ -1,0 +1,19 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Home from '../components/Home.astro';
+import AboutMe from '../components/AboutMe.astro';
+import Skills from "./skills.astro";
+import ContactMe from '../components/ContactMe.astro';
+import '../styles/global.css';
+import IndexProject from "./projects/indexProject.astro";
+---
+
+<Layout title="My Portfolio">
+    <Home id="home" />
+    <AboutMe id="aboutMe" />
+    <Skills id="skills" />
+    <IndexProject id="projectsPreview" />
+    <ContactMe id="contactMe" />
+</Layout>
+
+

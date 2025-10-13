@@ -1,0 +1,214 @@
+---
+import { sanityClient } from "../../lib/sanityClient";
+import imageUrlBuilder from '@sanity/image-url';
+
+const { id } = Astro.props;
+
+const builder = imageUrlBuilder(sanityClient);
+
+function urlFor(source: any) {
+    return builder.image(source);
+}
+
+type Project = {
+    _id: string;
+    title: string;
+    subtitle: string;
+    slug: { current: string };
+    projectType: string;
+    otherType?: string;
+    mode: string;
+    images?: any[];
+    description: string;
+    contribution?: string;
+    technologies?: string[];
+    githubLink?: string;
+};
+
+const PROJECT_QUERY = `*[_type == "projects"] | order(createdAt desc){
+  _id,
+  title,
+  subtitle,
+  slug,
+  projectType,
+  otherType,
+  mode,
+  images,
+  description,
+  contribution,
+  technologies,
+  githubLink
+}`;
+
+const projects: Project[] = await sanityClient.fetch(PROJECT_QUERY);
+
+function truncateText(text: string, maxLength: number = 150): string {
+    if (text.length <= maxLength) return text;
+    return text.slice(0, maxLength).trim() + '...';
+}
+---
+
+<section id={id} class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 relative overflow-hidden py-20">
+
+    <div class="container mx-auto px-6 lg:px-40 text-white relative z-10">
+        <div class="text-center mb-10">
+            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-3 border-b-2 border-purple-400 inline-block pb-2">
+                Projects
+            </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="projects-container">
+            {projects.map((project, index) => (
+                    <div class="project-item group relative bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 hover:transform hover:-translate-y-2 flex flex-col overflow-hidden" style={index >= 3 ? 'display: none;' : ''}>
+                        <div class="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                        <div class="relative z-10 p-6 pb-4">
+                            <h3 class="text-xl text-center font-bold text-white mb-1">{project.title}</h3>
+                        </div>
+
+                        <div class="relative z-10 w-full h-48 bg-gray-900/50">
+                            {project.images && project.images.length > 0 ? (
+                                    <div class="image-slider relative w-full h-full" data-project-id={project._id}>
+                                        {project.images.map((image, imgIndex) => (
+                                                <img
+                                                        src={urlFor(image).width(700).height(400).url()}
+                                                        alt={`${project.title} - Image ${imgIndex + 1}`}
+                                                        class="slider-image absolute top-0 left-1/2 -translate-x-1/2 w-[90%] h-auto transition-opacity duration-300"
+                                                        class:list={[imgIndex === 0 ? 'opacity-100' : 'opacity-0']}
+                                                        data-index={imgIndex}
+                                                />
+                                        ))}
+
+                                        {project.images.length > 1 && (
+                                                <>
+                                                    <button class="slider-btn prev-btn absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all z-10">
+                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                                                        </svg>
+                                                    </button>
+                                                    <button class="slider-btn next-btn absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all z-10">
+                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                                        </svg>
+                                                    </button>
+
+                                                    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1 z-10">
+                                                        {project.images.map((_, dotIndex) => (
+                                                                <div class:list={[
+                                                                    'slider-dot w-2 h-2 rounded-full transition-all',
+                                                                    dotIndex === 0 ? 'bg-purple-500 w-6' : 'bg-gray-500'
+                                                                ]} data-index={dotIndex}></div>
+                                                        ))}
+                                                    </div>
+
+                                                </>
+                                        )}
+                                    </div>
+                            ) : (
+                                    <div class="w-full h-full flex items-center justify-center text-gray-500">
+                                        <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                    </div>
+                            )}
+                        </div>
+
+                        <div class="relative z-10 p-6 pt-4 flex flex-col flex-grow">
+                            <p class="text-md font-semibold text-purple-400 mb-2">{project.subtitle}</p>
+                            <p class="text-sm text-gray-300 mb-4 flex-grow">{truncateText(project.description)}</p>
+
+                            <a
+                                    href={`/projects/${project.slug.current}`}
+                                    class="inline-block px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 rounded-lg font-semibold text-sm text-white transition-all duration-300 text-center"
+                            >
+                                View More
+                            </a>
+                        </div>
+                    </div>
+            ))}
+        </div>
+
+        {projects.length > 3 && (
+                <div class="flex justify-center mt-8">
+                    <button id="load-more-btn" class="px-6 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-semibold transition-all">
+                        See More
+                    </button>
+                </div>
+        )}
+
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const sliders = document.querySelectorAll('.image-slider');
+
+        sliders.forEach(slider => {
+            const images = slider.querySelectorAll('.slider-image');
+            const dots = slider.querySelectorAll('.slider-dot');
+            const prevBtn = slider.querySelector('.prev-btn');
+            const nextBtn = slider.querySelector('.next-btn');
+            let currentIndex = 0;
+
+            function showImage(index: number) {
+                images.forEach((img, i) => {
+                    if (i === index) {
+                        img.classList.add('opacity-100');
+                        img.classList.remove('opacity-0');
+                    } else {
+                        img.classList.remove('opacity-100');
+                        img.classList.add('opacity-0');
+                    }
+                });
+
+                dots.forEach((dot, i) => {
+                    if (i === index) {
+                        dot.classList.add('bg-purple-500', 'w-6');
+                        dot.classList.remove('bg-gray-500', 'w-2');
+                    } else {
+                        dot.classList.remove('bg-purple-500', 'w-6');
+                        dot.classList.add('bg-gray-500', 'w-2');
+                    }
+                });
+
+                currentIndex = index;
+            }
+
+            if (prevBtn) {
+                prevBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const newIndex = currentIndex === 0 ? images.length - 1 : currentIndex - 1;
+                    showImage(newIndex);
+                });
+            }
+
+            if (nextBtn) {
+                nextBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const newIndex = currentIndex === images.length - 1 ? 0 : currentIndex + 1;
+                    showImage(newIndex);
+                });
+            }
+        });
+
+        const projects = document.querySelectorAll('.project-item');
+        const loadMoreBtn = document.getElementById('load-more-btn');
+        let visibleCount = 3;
+        const increment = 3;
+
+        if (loadMoreBtn) {
+            loadMoreBtn.addEventListener('click', () => {
+                const nextCount = visibleCount + increment;
+                for (let i = visibleCount; i < nextCount && i < projects.length; i++) {
+                    projects[i].style.display = 'block';
+                }
+                visibleCount = nextCount;
+
+                if (visibleCount >= projects.length) {
+                    loadMoreBtn.style.display = 'none';
+                }
+            });
+        }
+    });
+</script>

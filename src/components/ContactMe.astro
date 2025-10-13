@@ -1,0 +1,198 @@
+---
+const { id } = Astro.props;
+---
+
+<section id={id} class="h-screen flex items-center bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 relative overflow-hidden">
+    <div class="container mx-auto px-6 lg:px-40 py-0 text-white">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-10">
+            <div class="flex-1 space-y-8 text-left md:ml-10">
+                <div class="space-y-6">
+                    <h1 class="text-3xl font-bold">Let's <span class="font-semibold text-purple-400">talk</span></h1>
+                    <p class="text-gray-300 text-md max-w-md">
+                        To request a quote or want to meet up for coffee, contact me directly or fill out the form and I will get back to you soon.
+                    </p>
+
+                    <form action="https://getform.io/f/bwnymmwa" method="POST" id="contact-form" class="max-w-lg mt-8 flex flex-col gap-6">
+                        <div class="flex flex-col">
+                            <label for="name" class="mb-2 text-gray-300">Your Name</label>
+                            <input type="text" id="name" name="name" required
+                                   class="px-3 py-1.5 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all">
+                        </div>
+
+                        <div class="flex flex-col">
+                            <label for="email" class="mb-2 text-gray-300">Your Email</label>
+                            <input type="email" id="email" name="email" required
+                                   class="px-3 py-1.5  bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all">
+                        </div>
+
+                        <div class="flex flex-col">
+                            <label for="message" class="mb-2 text-gray-300">Your Message</label>
+                            <textarea id="message" name="message" rows="4" placeholder="Type your message here..." required
+                                      class="px-3 py-1.5  bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all resize-none"></textarea>
+                        </div>
+
+                        <button type="submit"
+                                class="mt-2 p-3 bg-gradient-to-r from-purple-600 to-blue-500 text-white font-medium rounded-lg hover:from-purple-700 hover:to-blue-600 transition-all duration-300 transform hover:-translate-y-1">
+                            SEND MESSAGE
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="flex-1 flex justify-center lg:justify-end relative">
+                <div class="relative">
+                    <img src="../../public/Profile.png" alt="Profile" class="w-80 h-80 lg:w-96 lg:h-96 object-cover rounded-full relative z-10">
+                    <div class="absolute inset-3 w-80 h-80 lg:w-96 lg:h-96 border-4 border-purple-500 rounded-full opacity-30 animate-pulse"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style is:global>
+    .toast {
+        position: fixed;
+        top: 2rem;
+        right: 2rem;
+        padding: 1rem 1.5rem;
+        border-radius: 0.75rem;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        z-index: 9999;
+        animation: slideIn 0.3s ease-out;
+        min-width: 300px;
+    }
+
+    .toast.success {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.9), rgba(5, 150, 105, 0.9));
+        border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .toast.error {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(220, 38, 38, 0.9));
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .toast-icon {
+        width: 24px;
+        height: 24px;
+        flex-shrink: 0;
+    }
+
+    .toast-message {
+        color: white;
+        font-weight: 500;
+        flex: 1;
+    }
+
+    .toast-close {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: white;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+        flex-shrink: 0;
+    }
+
+    .toast-close:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideOut {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+    }
+
+    .toast.slide-out {
+        animation: slideOut 0.3s ease-in forwards;
+    }
+
+    @media (max-width: 640px) {
+        .toast {
+            top: 1rem;
+            right: 1rem;
+            left: 1rem;
+            min-width: auto;
+        }
+    }
+</style>
+
+<script type="module">
+    const form = document.getElementById("contact-form");
+
+    function showToast(message, type = 'success') {
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+
+        const icon = type === 'success'
+            ? '<svg class="toast-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>'
+            : '<svg class="toast-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>';
+
+        toast.innerHTML = `
+            ${icon}
+            <span class="toast-message">${message}</span>
+            <button class="toast-close" aria-label="Close">×</button>
+        `;
+
+        document.body.appendChild(toast);
+
+        const closeBtn = toast.querySelector('.toast-close');
+        const removeToast = () => {
+            toast.classList.add('slide-out');
+            setTimeout(() => toast.remove(), 300);
+        };
+
+        closeBtn.addEventListener('click', removeToast);
+        setTimeout(removeToast, 5000);
+    }
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const action = form.action;
+
+        try {
+            const response = await fetch(action, {
+                method: "POST",
+                body: formData,
+            });
+
+            if (response.ok) {
+                showToast("Message sent successfully! I'll get back to you soon.", 'success');
+                form.reset();
+            } else {
+                showToast("Failed to send message. Please try again.", 'error');
+            }
+        } catch (error) {
+            showToast("An error occurred. Please try again.", 'error');
+            console.error(error);
+        }
+    });
+</script>
