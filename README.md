@@ -2,15 +2,11 @@
 
 Welcome to my personal portfolio! This project showcases my skills, projects, and experiences as a software engineer and web developer.
 
----
-
 ## 💼 About This Portfolio
 
 I built this using **Astro JS** for a modern, fast, and SEO-friendly structure, **Tailwind CSS** for responsive and clean design, and **TypeScript** to ensure type safety and maintainable code. The content, including project details and descriptions, is managed dynamically through **Sanity CMS**, allowing easy updates without touching the code.
 
 This portfolio is fully responsive, optimized for performance, and designed to provide a smooth and interactive user experience. It highlights my key projects, technical skills, and professional background, serving as both a personal brand and a practical demonstration of my abilities in web development and UI/UX design.
-
----
 
 ## 🚀 About Me
 
@@ -28,8 +24,6 @@ Here's a glimpse of the technologies I work with:
 - **Deployment:** Vercel
 - **Tools:** Git, Figma, VS Code
 
----
-
 ## ⭐ Features
 
 - ✨ Fully responsive design
@@ -38,7 +32,6 @@ Here's a glimpse of the technologies I work with:
 - 📂 Projects categorized with clear details
 - 🔄 Dynamic content management via Sanity CMS
 
----
 
 ## 📌 How to Run Locally
 ```bash
@@ -57,13 +50,10 @@ npm run dev
 
 Open [http://localhost:4321](http://localhost:4321) in your browser to view the portfolio.
 
----
 
 ## 🔗 Live Demo
 
 Check out the live version of my portfolio here: [viduni-hewage.vercel.app](https://viduni-hewage.vercel.app/)
-
----
 
 ## 📬 Connect With Me
 
