@@ -24,6 +24,7 @@ type Project = {
     contribution?: string[];
     technologies?: string[];
     githubLink?: string;
+    figmaLink?: string;
     images?: any[];
 };
 
@@ -39,6 +40,7 @@ const PROJECT_QUERY = `*[_type == "projects" && slug.current == $slug][0]{
   contribution,
   technologies,
   githubLink,
+  figmaLink,
   images
 }`;
 
@@ -53,7 +55,9 @@ if (!project) {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{project.title}</title>
+    <title>{project.title} - Viduni Hewage</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png">
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
 <div class="fixed top-0 left-0 right-0 z-50 h-20">
@@ -145,17 +149,29 @@ if (!project) {
                 </div>
             </div>
     )}
-    {project.githubLink && (
-            <div class="mt-8">
-                <a
+    {(project.githubLink || project.figmaLink) && (
+        <div class="mt-8 flex gap-4 flex-wrap">
+            {project.githubLink && (
+                    <a
                         href={project.githubLink}
                         target="_blank"
                         rel="noopener noreferrer"
                         class="inline-block px-6 py-3 border border-white text-white rounded font-medium hover:bg-white hover:text-gray-900 transition"
+                    >
+                        View on GitHub
+                    </a>
+            )}
+            {project.figmaLink && (
+                <a
+                    href={project.figmaLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-block px-6 py-3 border border-white text-white rounded font-medium hover:bg-white hover:text-gray-900 transition"
                 >
-                    View on GitHub
+                    View on Figma
                 </a>
-            </div>
+            )}
+        </div>
     )}
 </div>
 

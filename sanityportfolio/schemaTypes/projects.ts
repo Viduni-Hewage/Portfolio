@@ -109,6 +109,12 @@ export default defineType({
             type: 'url',
         },
         {
+            name: 'figmaLink',
+            title: 'Figma Link',
+            type: 'url',
+            description: 'Link to Figma design (if applicable)',
+        },
+        {
             name: 'createdAt',
             title: 'Created At',
             type: 'datetime',
