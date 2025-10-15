@@ -9,8 +9,8 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/node": "^9.4.4",
     "@astrojs/tailwind": "^6.0.2",
+    "@astrojs/vercel": "^8.2.10",
     "@sanity/client": "^7.12.0",
     "@sanity/image-url": "^1.2.0",
     "astro": "^5.14.1",
