@@ -57,7 +57,7 @@ Check out the live version of my portfolio here: [viduni-hewage.vercel.app](http
 
 ## 📬 Connect With Me
 
-- **LinkedIn:** [Viduni-Hewage](www.linkedin.com/in/viduni-hewage-011a30293)
+- **LinkedIn:** [Viduni-Hewage](https://www.linkedin.com/in/viduni-hewage-011a30293)
 - **GitHub:** [@Viduni-Hewage](https://github.com/Viduni-Hewage)
 - **Email:** viduhewage23@gmail.com
 
