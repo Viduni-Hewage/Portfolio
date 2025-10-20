@@ -1,0 +1,118 @@
+---
+// Imports
+import { sanityClient } from "../lib/sanityClient";
+import imageUrlBuilder from '@sanity/image-url';
+
+const { id } = Astro.props;
+
+// Sanity image URL builder
+const builder = imageUrlBuilder(sanityClient);
+function urlFor(source: any) {
+    return builder.image(source);
+}
+
+// Fetch experiences from Sanity
+const query = `*[_type == "experiences"] | order(number asc){
+  title,
+  organization,
+  image,
+  number,
+  startMonth,
+  startYear,
+  endMonth,
+  endYear,
+  isPresent,
+  details
+}`;
+const experiences = await sanityClient.fetch(query);
+
+// Format date helper
+function formatDate(exp) {
+    let dateStr = '';
+
+    if (exp.startMonth && exp.startYear) {
+        dateStr = `${exp.startMonth} ${exp.startYear}`;
+    } else if (exp.startYear) {
+        dateStr = `${exp.startYear}`;
+    }
+
+    if (exp.isPresent) {
+        dateStr += ' – Present';
+    } else if (exp.endYear) {
+        if (exp.endMonth) {
+            dateStr += ` – ${exp.endMonth} ${exp.endYear}`;
+        } else {
+            dateStr += ` – ${exp.endYear}`;
+        }
+    }
+
+    return dateStr;
+}
+---
+
+<section
+        id={id}
+        class="min-h-screen flex items-center bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 relative overflow-hidden py-20"
+>
+    <div class="container mx-auto px-6 lg:px-20 xl:px-32 relative z-10">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl sm:text-4xl font-semibold text-white pb-1 inline-block border-b-2 border-purple-400">
+                Experiences
+            </h2>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
+            {experiences.map((exp, index) => {
+                const dateStr = formatDate(exp);
+                const total = experiences.length;
+                const leftCount = Math.ceil(total / 2);
+                const row = index < leftCount ? index + 1 : (index - leftCount) + 1;
+                const col = index < leftCount ? 1 : 2;
+
+                return (
+                        <div
+                                class="relative group flex items-start gap-4"
+                                style={`grid-row: ${row}; grid-column: ${col};`}
+                        >
+                            <div class="relative flex flex-col items-center">
+                                <div class="w-3 h-3 bg-purple-500 rounded-full"></div>
+                                <div class="w-0.5 h-24 bg-gradient-to-b from-purple-500 to-transparent"></div>
+                            </div>
+
+                            <div class="relative">
+                                <h3 class="text-lg font-semibold text-white mb-1 flex items-center gap-2">
+                                    {exp.title}
+                                    {dateStr && (
+                                            <span class="text-md text-gray-300 font-medium">
+                                        ( {dateStr} )
+                                    </span>
+                                    )}
+                                </h3>
+
+                                <h4 class="text-md font-semibold text-white mb-1 flex items-center gap-2">
+                                    {exp.organization}
+                                </h4>
+
+                                {exp.details && exp.details.length > 0 && (
+                                        <ul class="space-y-0">
+                                            {exp.details.map((d, i) => (
+                                                    <li key={i} class="flex items-start gap-1 text-gray-300 leading-relaxed">
+                                                        <span class="flex-1">{d}</span>
+                                                    </li>
+                                            ))}
+                                        </ul>
+                                )}
+                                {exp.image && (
+                                        <img
+                                                src={urlFor(exp.image).width(40).height(40).url()}
+                                                alt={exp.organization}
+                                                class="w-8 h-8 rounded-sm object-cover"
+                                        />
+                                )}
+                            </div>
+                        </div>
+                );
+            })}
+        </div>
+    </div>
+</section>
