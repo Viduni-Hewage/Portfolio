@@ -19,11 +19,11 @@ import Footer from '../components/Footer.astro';
 </head>
 <body class="bg-black text-gray-800 scroll-smooth min-h-screen flex flex-col">
 
-<div class="fixed top-0 left-0 right-0 z-50">
+<div class="fixed top-0 left-0 right-0 z-50 sm:mb-14">
     <Header />
 </div>
 
-<main class="flex-grow sm:pt-0 md:pt-0 lg:pt-0 lg:pb-0 md:pb-0 sm:pb-10 mb-0">
+<main class="overflow-y-auto flex-grow sm:pt-10 md:pt-0 lg:pt-0 lg:pb-0 md:pb-0 sm:mb-100 mb-0">
     <slot />
 </main>
 

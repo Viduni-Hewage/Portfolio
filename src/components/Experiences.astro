@@ -58,7 +58,7 @@ function formatDate(exp) {
             </h2>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
+        <div class="flex flex-col lg:grid lg:grid-cols-2 gap-8 lg:gap-10">
             {experiences.map((exp, index) => {
                 const dateStr = formatDate(exp);
                 const total = experiences.length;

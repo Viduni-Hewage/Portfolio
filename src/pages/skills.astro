@@ -70,12 +70,14 @@ const categoryTitles: Record<string, string> = {
             ))}
         </div>
 
-        <div class="relative min-h-[400px]">
+        <div class="relative min-h-[400px] w-full">
             {categories.map((category, index) => (
                     <div
-                            class="skill-content absolute inset-0 transition-opacity duration-300"
+                            class="skill-content transition-opacity duration-300 w-full"
                             data-category={category}
-                            class:list={[index === 0 ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none']}
+                            class:list={[
+                                index === 0 ? 'opacity-100 pointer-events-auto relative' : 'opacity-0 pointer-events-none absolute inset-0'
+                            ]}
                     >
                         {groupedSkills[category] && (
                                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
@@ -139,11 +141,11 @@ const categoryTitles: Record<string, string> = {
 
                 skillContents.forEach(content => {
                     if (content.getAttribute('data-category') === category) {
-                        content.classList.remove('opacity-0', 'pointer-events-none');
-                        content.classList.add('opacity-100', 'pointer-events-auto');
+                        content.classList.remove('opacity-0', 'pointer-events-none', 'absolute', 'inset-0');
+                        content.classList.add('opacity-100', 'pointer-events-auto', 'relative');
                     } else {
-                        content.classList.add('opacity-0', 'pointer-events-none');
-                        content.classList.remove('opacity-100', 'pointer-events-auto');
+                        content.classList.add('opacity-0', 'pointer-events-none', 'absolute', 'inset-0');
+                        content.classList.remove('opacity-100', 'pointer-events-auto', 'relative');
                     }
                 });
             });

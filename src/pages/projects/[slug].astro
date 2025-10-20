@@ -64,9 +64,9 @@ if (!project) {
     <Header />
 </div>
 
-<div class="container mx-auto px-6 py-20 max-w-4xl sm:mt-36 md:mt-12">
-    <div class="mb-12 text-center">
-        <h1 class="text-3xl font-semibold mb-3">
+<div class="container mx-auto px-6 py-20 max-w-4xl sm:mt-10 md:mt-12">
+    <div class="mb-1 text-center">
+        <h1 class="text-3xl font-semibold mb-3 sm:mb-0">
             <span class="text-4xl font-bold text-purple-400">{project.title}</span>
             {project.subtitle && ` - ${project.subtitle}`}
         </h1>
@@ -74,12 +74,12 @@ if (!project) {
 
     {project.images && project.images.length > 0 ? (
             <div
-                    class="image-slider relative w-full h-[550px] flex justify-center items-center mb-14 rounded-lg"
+                    class="image-slider relative w-full h-[550px] flex justify-center items-center mb-1 rounded-lg"
                     data-project-id={project._id}
             >
                 {project.images.map((image: any, imgIndex: number) => (
                         <img
-                                src={urlFor(image).width(900).height(550).url()}
+                                src={urlFor(image).url()}
                                 alt={`${project.title} - Image ${imgIndex + 1}`}
                                 class="slider-image absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-h-full max-w-full object-contain transition-opacity duration-500"
                                 class:list={[imgIndex === 0 ? "opacity-100" : "opacity-0"]}
@@ -88,7 +88,7 @@ if (!project) {
                 ))}
 
                 {project.images.length > 1 && (
-                        <div class="absolute top-1/2 left-0 right-0 flex justify-between px-4 z-20 -translate-y-1/2">
+                        <div class="absolute top-1/2 left-0 right-0 flex justify-between px-4 z-20 -translate-y-1/2 sm:m-0">
                             <button class="slider-btn prev-btn bg-black/50 hover:bg-white text-white hover:text-black p-2 rounded-full transition-all">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
