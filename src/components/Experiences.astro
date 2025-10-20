@@ -1,21 +1,19 @@
 ---
-// Imports
 import { sanityClient } from "../lib/sanityClient";
 import imageUrlBuilder from '@sanity/image-url';
 
 const { id } = Astro.props;
 
-// Sanity image URL builder
 const builder = imageUrlBuilder(sanityClient);
 function urlFor(source: any) {
     return builder.image(source);
 }
 
-// Fetch experiences from Sanity
 const query = `*[_type == "experiences"] | order(number asc){
   title,
   organization,
   image,
+  url,
   number,
   startMonth,
   startYear,
@@ -26,7 +24,6 @@ const query = `*[_type == "experiences"] | order(number asc){
 }`;
 const experiences = await sanityClient.fetch(query);
 
-// Format date helper
 function formatDate(exp) {
     let dateStr = '';
 
@@ -103,12 +100,23 @@ function formatDate(exp) {
                                         </ul>
                                 )}
                                 {exp.image && (
-                                        <img
-                                                src={urlFor(exp.image).width(40).height(40).url()}
-                                                alt={exp.organization}
-                                                class="w-8 h-8 rounded-sm object-cover"
-                                        />
+                                    exp.url ? (
+                                            <a href={exp.url} target="_blank" rel="noopener noreferrer">
+                                                <img
+                                                        src={urlFor(exp.image).width(40).height(40).url()}
+                                                        alt={exp.organization}
+                                                        class="w-8 h-8 rounded-sm object-cover cursor-pointer"
+                                                />
+                                            </a>
+                                    ) : (
+                                            <img
+                                                    src={urlFor(exp.image).width(40).height(40).url()}
+                                                    alt={exp.organization}
+                                                    class="w-8 h-8 rounded-sm object-cover"
+                                            />
+                                    )
                                 )}
+
                             </div>
                         </div>
                 );

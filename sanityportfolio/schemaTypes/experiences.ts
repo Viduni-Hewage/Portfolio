@@ -26,6 +26,12 @@ export default defineType({
             },
         }),
         defineField({
+            name: 'url',
+            title: 'URL',
+            type: 'url',
+            description: 'Optional: Link to open when the image is clicked'
+        }),
+        defineField({
             name: 'number',
             title: 'Number',
             type: 'number',
