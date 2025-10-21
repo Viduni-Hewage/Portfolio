@@ -10,12 +10,28 @@ import Experiences from "../components/Experiences.astro";
 ---
 
 <Layout title="Viduni Hewage | Portfolio">
-    <Home id="home" />
-    <AboutMe id="aboutMe" />
-    <Skills id="skills" />
-    <Experiences id="experiences" />
-    <IndexProject id="projectsPreview" />
-    <ContactMe id="contactMe" />
+    <Home id="home" dataTitle="Home - Viduni Hewage | Portfolio"  />
+    <AboutMe id="aboutMe" dataTitle="About Me - Viduni Hewage | Portfolio" />
+    <Skills id="skills" dataTitle="Skills - Viduni Hewage | Portfolio" />
+    <Experiences id="experiences" dataTitle="Experiences - Viduni Hewage | Portfolio"  />
+    <IndexProject id="projectsPreview" dataTitle="Projects - Viduni Hewage | Portfolio" />
+    <ContactMe id="contactMe" dataTitle="Contact Me - Viduni Hewage | Portfolio" />
 </Layout>
 
+<script>
+    document.addEventListener('scroll', () => {
+        const sections = document.querySelectorAll('section[id]') as NodeListOf<HTMLElement>;
+        const scrollPos = window.scrollY + window.innerHeight / 2;
 
+        sections.forEach(section => {
+            const top = section.offsetTop;
+            const height = section.offsetHeight;
+            const title = section.dataset.title;
+
+            if (scrollPos >= top && scrollPos < top + height) {
+                document.title = title ?? "Portfolio";
+            }
+        });
+    });
+
+</script>

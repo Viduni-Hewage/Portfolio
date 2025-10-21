@@ -2,7 +2,7 @@
 import { sanityClient } from "../lib/sanityClient";
 import imageUrlBuilder from '@sanity/image-url';
 
-const { id } = Astro.props;
+const { id, dataTitle } = Astro.props;
 
 const builder = imageUrlBuilder(sanityClient);
 function urlFor(source: any) {
@@ -62,7 +62,7 @@ function formatDate(exp: Experience) {
 ---
 
 <section
-        id={id}
+        id={id} data-title={dataTitle}
         class="min-h-screen flex items-center bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 relative overflow-hidden py-20"
 >
     <div class="container mx-auto px-6 lg:px-20 xl:px-32 relative z-10">

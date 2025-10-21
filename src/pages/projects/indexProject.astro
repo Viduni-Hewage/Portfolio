@@ -1,8 +1,9 @@
 ---
 import { sanityClient } from "../../lib/sanityClient";
 import imageUrlBuilder from '@sanity/image-url';
+import Header from "../../components/Header.astro";
 
-const { id } = Astro.props;
+const { id, dataTitle } = Astro.props;
 
 const builder = imageUrlBuilder(sanityClient);
 
@@ -48,7 +49,22 @@ function truncateText(text: string, maxLength: number = 150): string {
 }
 ---
 
-<section id={id} class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 relative overflow-hidden py-20">
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Projects - Viduni Hewage | Portfolio</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png">
+</head>
+
+<body class="bg-gray-900 text-white min-h-screen">
+<div class="fixed top-0 left-0 right-0 z-50 h-20">
+    <Header />
+</div>
+
+<section id={id ?? "projects"} data-title={dataTitle} class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 relative overflow-hidden py-20">
 
     <div class="container mx-auto px-6 lg:px-40 text-white relative z-10">
         <div class="text-center mb-10">
@@ -192,8 +208,8 @@ function truncateText(text: string, maxLength: number = 150): string {
             }
         });
 
-        const projects = document.querySelectorAll('.project-item');
-        const loadMoreBtn = document.getElementById('load-more-btn');
+        const projects = document.querySelectorAll('.project-item') as NodeListOf<HTMLElement>;
+        const loadMoreBtn = document.getElementById('load-more-btn') as HTMLElement | null;
         let visibleCount = 3;
         const increment = 3;
 
@@ -212,3 +228,6 @@ function truncateText(text: string, maxLength: number = 150): string {
         }
     });
 </script>
+
+</body>
+</html>
