@@ -1,8 +1,8 @@
 ---
-const { id } = Astro.props;
+const { id, dataTitle } = Astro.props;
 ---
 
-<section id={id} class="min-h-screen flex items-center bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 relative overflow-hidden py-20">
+<section id={id} data-title={dataTitle} class="min-h-screen flex items-center bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 relative overflow-hidden py-20">
     <div class="container mx-auto px-6 lg:px-40 text-white">
         <div class="flex flex-col md:flex-row items-center justify-between gap-10">
             <div class="flex-1 space-y-8 text-left md:ml-10">

@@ -1,6 +1,7 @@
 ---
 import { sanityClient } from "../lib/sanityClient";
-const { id } = Astro.props;
+import Header from "../components/Header.astro";
+const { id, dataTitle } = Astro.props;
 
 type Skill = {
     _id: string;
@@ -35,7 +36,19 @@ const categoryTitles: Record<string, string> = {
 };
 ---
 
-<section id={id} class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 relative overflow-hidden py-20">
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skills - Viduni Hewage | Portfolio</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png">
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+<div class="fixed top-0 left-0 right-0 z-50 h-20">
+    <Header />
+</div>
+<section id={id ?? "skills"} data-title={dataTitle} class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 relative overflow-hidden py-20">
     <div class="hidden lg:block left-20 top-1/2 -translate-y-1/2 z-0">
         <h3 class="text-3xl ml-28 font-semibold text-white border-b-2 border-purple-400 transform -rotate-90 whitespace-nowrap">
             Skills
@@ -152,3 +165,6 @@ const categoryTitles: Record<string, string> = {
         });
     });
 </script>
+
+</body>
+</html>
