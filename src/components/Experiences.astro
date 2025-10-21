@@ -9,6 +9,20 @@ function urlFor(source: any) {
     return builder.image(source);
 }
 
+type Experience = {
+    title: string;
+    organization: string;
+    image?: any;
+    url?: string;
+    number: number;
+    startMonth?: string;
+    startYear?: string;
+    endMonth?: string;
+    endYear?: string;
+    isPresent?: boolean;
+    details?: string[];
+};
+
 const query = `*[_type == "experiences"] | order(number asc){
   title,
   organization,
@@ -22,9 +36,9 @@ const query = `*[_type == "experiences"] | order(number asc){
   isPresent,
   details
 }`;
-const experiences = await sanityClient.fetch(query);
+const experiences: Experience[] = await sanityClient.fetch(query);
 
-function formatDate(exp) {
+function formatDate(exp: Experience) {
     let dateStr = '';
 
     if (exp.startMonth && exp.startYear) {
@@ -59,7 +73,7 @@ function formatDate(exp) {
         </div>
 
         <div class="flex flex-col lg:grid lg:grid-cols-2 gap-8 lg:gap-10">
-            {experiences.map((exp, index) => {
+            {experiences.map((exp: Experience, index: number) => {
                 const dateStr = formatDate(exp);
                 const total = experiences.length;
                 const leftCount = Math.ceil(total / 2);
@@ -92,13 +106,14 @@ function formatDate(exp) {
 
                                 {exp.details && exp.details.length > 0 && (
                                         <ul class="space-y-0">
-                                            {exp.details.map((d, i) => (
-                                                    <li key={i} class="flex items-start gap-1 text-gray-300 leading-relaxed">
+                                            {exp.details.map((d: string, i: number) => (
+                                                    <li class="flex items-start gap-1 text-gray-300 leading-relaxed">
                                                         <span class="flex-1">{d}</span>
                                                     </li>
                                             ))}
                                         </ul>
                                 )}
+
                                 {exp.image && (
                                     exp.url ? (
                                             <a href={exp.url} target="_blank" rel="noopener noreferrer">
@@ -116,7 +131,6 @@ function formatDate(exp) {
                                             />
                                     )
                                 )}
-
                             </div>
                         </div>
                 );
